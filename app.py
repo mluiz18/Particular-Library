@@ -22,6 +22,7 @@ def get_html(content, title="Library"):
 
 def initialize_csv():
     if not os.path.exists("csv/books.csv"):
+        os.makedirs("csv", exist_ok=True)
         with open('csv/books.csv', 'w', encoding='utf-8', newline="") as f:
             writer = csv.writer(f)
             writer.writerow(["id", "name", "author", "publisher", "totalpages", "readedpages"])
@@ -35,6 +36,7 @@ app = Flask(__name__)
 def inital_page():
     c = f""
     return get_html(c)
+
 
 if __name__ == "__main__":
     initialize_csv()

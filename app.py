@@ -29,12 +29,34 @@ def initialize_csv():
             writer.writerow(["1", "1984", "George Orwell", "433", "233"])
 
 
-app = Flask(__name__)
+def read_csv():
+    Books = []
+    try:
+        with open('csv/books.csv', 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for r in reader:
+                book = Book()
+                book.setId(r['id'])
+                book.setName(r['name'])
+                book.setAuthor(r['author'])
+                book.setPublisher(r['publisher'])
+                book.setTotalPages(r['totalpages'])
+                book.setReadedPages(r['readedpages'])
+                Books.append(book)
+    except FileNotFoundError:
+        print("Didn't find the file")
+    except Exception as e:
+        print(f"Error: \n {e}")
+    finally:
+        return Books
 
+
+app = Flask(__name__)
 
 @app.route('/', methods=["POST", "GET"])
 def inital_page():
-    c = f""
+    l = read_csv()
+    c = f"{l[0].getName()}"
     return get_html(c)
 
 

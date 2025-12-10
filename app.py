@@ -50,17 +50,34 @@ def read_csv():
     finally:
         return Books
 
+# Todo: Criar função para salvar novos dados no arquivo
+def save_in_file(book):
+    with open('csv/books.csv', 'w', encoding='utf-8', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["id", "name", "author", "publisher", "totalpages", "readedpages"])
+        for i in book:
+            writer.writerow([i.getId(), i.getName(), i.getAuthor(), i.getPublisher(), i.getTotalPages(), i.getReadedPages()])
 
 app = Flask(__name__)
 
 @app.route('/', methods=["POST", "GET"])
 def inital_page():
     l = read_csv()
-    c = f"{l[0].getName()}"
+    c = f"..."
     return get_html(c)
 
 
 if __name__ == "__main__":
     initialize_csv()
+    books = []
+    b = Book()
+    b.setId("2")
+    b.setName("Memorias Postumas de Brás Cubas")
+    b.setAuthor("Machado de Assis")
+    b.setPublisher("Maquinaria")
+    b.setTotalPages("480")
+    b.setReadedPages("132")
+    books.append(b)
+    save_in_file(books)
     print("http://localhost:5000")
     app.run(debug=True, host='0.0.0.0', port=5000)
